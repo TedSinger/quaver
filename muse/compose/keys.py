@@ -8,7 +8,10 @@ class Key(object):
 
     def __getitem__(self, slc: slice):
         total_halves = slc.stop.halves_above_C4 - slc.start.halves_above_C4
-        candidates = [slc.start.T(i) for i in range(0, total_halves + 1, slc.step or 1)]
+        if total_halves > 0:
+            candidates = [slc.start.T(i) for i in range(0, total_halves + 1)]
+        else:
+            candidates = [slc.start.T(-i) for i in range(0, - total_halves + 1)]
         return Stanza(*[c for c in candidates if c in self])
 
 
