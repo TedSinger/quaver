@@ -1,7 +1,10 @@
+import os
 import abc
 import math
+import wave
 import numpy
-from muse.play.output import play
+import tempfile
+import subprocess
 from muse.compose.constants import FRAME_RATE
 
 
@@ -22,8 +25,27 @@ class Block(object):
     def silence(cls, frames: int):
         return LazyBlock(lambda: numpy.zeros(frames), 0)
 
+    def to_wav(self, filename, nchannels=1, sample_width=2, compression_type='NONE', compression_name='no compression'):
+        with open(filename, 'wb') as f:
+            with wave.open(f) as w:
+                w.setparams((
+                    nchannels,
+                    sample_width,
+                    FRAME_RATE,
+                    0,  # setting zero frames, should update automatically as more frames written
+                    compression_type,
+                    compression_name
+                ))
+                w.setnframes((0xFFFFFFFF - 36) // w.getnchannels() // w.getsampwidth())
+                w.writeframesraw(self.to_bytes())
+
     def play(self):
-        play(self.to_bytes())
+        # *nix (and possibly Ubuntu) specific
+        f = tempfile.NamedTemporaryFile('wb', delete=False)
+        f.close()
+        self.to_wav(f.name)
+        subprocess.call(['play', '-t', 'wav', f.name])
+        os.unlink(f.name)
 
 
 class NumpyBlock(Block):
