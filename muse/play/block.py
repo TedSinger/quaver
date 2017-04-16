@@ -18,7 +18,7 @@ class Block(object):
         arr = self.array
         m = max(abs(arr))
         if m > 1:
-            print(f'Warning: too loud. The waveform will be scaled down by a factor of {m:.2}')
+            print('Warning: too loud. The waveform will be scaled down by a factor of {m:.2}'.format(m=m))
             arr /= m
         return (arr * (2 ** 15 - 1)).astype('int16').tobytes()
 

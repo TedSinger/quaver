@@ -20,4 +20,5 @@ Stanza(A4.maj, D4.maj)  # You can put Stanzas in Chords, or Chords in Stanzas, n
 Z.T(7) % 2  # unchanged - rests are not affected by pitch or dynamics
 Z / 2  # but tempo changes still work
 
-A4.maj.to_sound(60).to_wav('/home/ted/')
+A4.maj.to_sound(60).to_wav('/home/ted/amajchord.wav')  # create a wav file at 60 beats per minute
+A4.maj > 60  # create a tempfile and play it immediatey
