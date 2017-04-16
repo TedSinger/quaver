@@ -15,7 +15,12 @@ class Block(object):
         return numpy.zeros(1)
 
     def to_bytes(self):
-        return (self.array * (2 ** 15 - 1)).astype('int16').tobytes()
+        arr = self.array
+        m = max(abs(arr))
+        if m > 1:
+            print(f'Warning: too loud. The waveform will be scaled down by a factor of {m:.2}')
+            arr /= m
+        return (arr * (2 ** 15 - 1)).astype('int16').tobytes()
 
     @classmethod
     def beep(cls, frames, frequency, amplitude):

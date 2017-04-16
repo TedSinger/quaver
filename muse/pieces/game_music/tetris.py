@@ -1,5 +1,4 @@
-from muse.compose.notes import *
-from muse.compose.keys import MinorKey
+from muse.compose import *
 
 # http://www.gamemusicthemes.com/sheetmusic/gameboy/tetris/themea/Tetris_-_Theme_A_Sheet_Music_by_Gori_Fater.png
 

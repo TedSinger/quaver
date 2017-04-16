@@ -1,5 +1,4 @@
-from muse.compose.notes import *
-from muse.compose.keys import MajorKey
+from muse.compose import *
 
 KEY = MajorKey(D4)
 

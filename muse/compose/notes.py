@@ -1,16 +1,8 @@
 from muse.compose.sounds import Note, Silence
-from muse.compose.constants import OCTAVE, A440
-from muse.compose.structure import Chord, Stanza
+from muse.compose.constants import A440
 
 
 A4 = Note(A440)
-def _generate_note_defns():
-    s = ''
-    for i in range(-OCTAVE * 4, OCTAVE * 2):
-        if '.' not in str(A4.T(i)):
-            s += str(A4.T(i)) + ' = A4.T(%s)\n' % i
-    return s
-
 Z = Silence()
 A0 = A4.T(-48)
 B0 = A4.T(-46)
