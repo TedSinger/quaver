@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
@@ -39,7 +39,7 @@ setup(
 
     keywords='music composing chord stanza DSL',
 
-    packages=['muse'],
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
     install_requires=['numpy'],
 
