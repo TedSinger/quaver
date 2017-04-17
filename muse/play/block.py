@@ -49,8 +49,10 @@ class Block(object):
         f = tempfile.NamedTemporaryFile('wb', delete=False)
         f.close()
         self.to_wav(f.name)
-        subprocess.call(['play', '-t', 'wav', f.name])
-        os.unlink(f.name)
+        try:
+            subprocess.call(['play', '-t', 'wav', f.name])
+        finally:
+            os.unlink(f.name)
 
 
 class NumpyBlock(Block):

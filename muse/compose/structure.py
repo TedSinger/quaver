@@ -99,10 +99,7 @@ class _Collection(_Playable):
 
     def x(self, other: int):
         assert isinstance(other, int)
-        if other >= 0:
-            return Stanza(*(self.notes * other))
-        else:
-            return Stanza(*(self.notes[::-1] * -other))
+        return Stanza(*[self for i in range(other)])
 
 
 class Chord(_Collection):
