@@ -1,9 +1,9 @@
 import abc
 from functools import reduce
 
-from muse.compose.base import _Playable, _duration_suffix
-from muse.compose.constants import FRAME_RATE
-from muse.play.block import CollectionBlock, Block
+from quaver.compose.base import _Playable, _duration_suffix
+from quaver.compose.constants import FRAME_RATE
+from quaver.play.block import CollectionBlock, Block
 
 
 # TODO:

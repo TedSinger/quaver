@@ -2,8 +2,8 @@ import abc
 
 from typing import List, TypeVar
 
-from muse.play.block import Block
-from muse.compose.constants import FRAME_RATE
+from quaver.play.block import Block
+from quaver.compose.constants import FRAME_RATE
 
 
 class _Playable(object):

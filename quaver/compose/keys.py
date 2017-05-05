@@ -1,4 +1,4 @@
-from muse.compose.structure import Stanza
+from quaver.compose.structure import Stanza
 
 
 class Key(object):

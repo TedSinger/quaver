@@ -1,4 +1,4 @@
-from muse.compose import *
+from quaver.compose import *
 
 C3  # a C quarter note
 +C3  # a C sharp

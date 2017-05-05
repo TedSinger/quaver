@@ -1,8 +1,11 @@
-from muse.compose import *
+from quaver.compose import *
 
 KEY = MajorKey(D4)
 
 BASE = Stanza(D3, A2, B2, +F2, G2, D2, G2, A2)
+
+_PIZZ = Stanza(D3.maj, A2.maj, B2.min, +F2.min, G2.maj, D2.maj, G2.maj, A2.maj)
+PIZZ = Stanza(*[(Z | (c.splayed * 3)) for c in _PIZZ]).T(12).staccato / 4
 
 VOICE_1 = Stanza(+F4, E4, D4, +C4, B3, A3, B3, +C4,
                  D4, +C4, B3, A3, G3, +F3, G3, E3).T(12)
@@ -80,10 +83,11 @@ VOICE_13_2 = (+F4 | +F3 | E3 | E4 | D4 | D3 | +C3 | +C4 |
 VOICES = VOICE_1 | VOICE_2 | VOICE_3 | VOICE_4 | VOICE_5 | VOICE_6 | VOICE_7 | VOICE_8 | VOICE_9 | VOICE_10 | VOICE_11 | VOICE_12
 
 PASSACAGLIA = Chord(
-    (BASE.x(28) | D2 * 3 / 2) ^ 1.5,
-    Z * 8 | VOICES | VOICE_13_1 | VOICE_13_2 | A4 * 3 / 2,
-    Z * 16 | VOICES | VOICE_13_1 | +F5 * 3 / 2,
-    Z * 24 | VOICES | D5 * 3 / 2) % 2
+    (BASE.x(28) | D2 * 3 / 2),
+    PIZZ.x(28),
+    (Z * 8 | VOICES | VOICE_13_1 | VOICE_13_2 | A4 * 3 / 2) ^ 2,
+    (Z * 16 | VOICES | VOICE_13_1 | +F5 * 3 / 2),
+    (Z * 24 | VOICES | D5 * 3 / 2)) % 2
 
 if __name__ == '__main__':
     PASSACAGLIA > 35

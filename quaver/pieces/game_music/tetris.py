@@ -1,4 +1,4 @@
-from muse.compose import *
+from quaver.compose import *
 
 # http://www.gamemusicthemes.com/sheetmusic/gameboy/tetris/themea/Tetris_-_Theme_A_Sheet_Music_by_Gori_Fater.png
 
@@ -28,7 +28,7 @@ BASE_3_4 = ((A3 | E3).x(4) | (+G3 | E3).x(4)).x(4)
 MELODY_4 = (E4 & C4 | C4 & A3 | D4 & B3 | B3 & +G3 |
             (A3 & C4 | E4 & C4) / 2 | C4 & A4 | (E4 & +G4) * 2) * 4
 
-THEME_A = (MELODY_1 | MELODY_2 | MELODY_3 | MELODY_4) & (BASE_1 | BASE_2 | BASE_3_4)
+THEME_A = ((MELODY_1 | MELODY_2).x(2) | (MELODY_3 | MELODY_4).x(2)) & ((BASE_1 | BASE_2).x(2) | BASE_3_4.x(2))
 
 if __name__ == '__main__':
     THEME_A > 240

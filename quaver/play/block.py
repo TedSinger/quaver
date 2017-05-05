@@ -5,7 +5,7 @@ import wave
 import numpy
 import tempfile
 import subprocess
-from muse.compose.constants import FRAME_RATE
+from quaver.compose.constants import FRAME_RATE
 
 
 class Block(object):
@@ -111,9 +111,28 @@ def beep_array(frames, frequency, amplitude):
     return _BEEPS[(frames, frequency, amplitude)]
 
 
+def distortion(frames):
+    pivot = math.pi * 7 / 4
+    part_one = numpy.linspace(start=0, stop=pivot, num=int(FRAME_RATE / 4))
+    if frames > FRAME_RATE / 4:
+        part_two = numpy.linspace(start=pivot, stop=pivot + math.pi * 17 * (frames / FRAME_RATE - 1/4.) ,
+                                    num=frames - int(FRAME_RATE / 4))
+        total = numpy.zeros(frames)
+        total[:int(FRAME_RATE / 4)] = part_one
+        total[int(FRAME_RATE / 4):] = part_two
+    else:
+        total = part_one[:frames]
+    numpy.sin(total, out=total)
+    total *= .005
+    total += 1
+    return total
+
+
 def _beep_array(frames, frequency, amplitude):
-    stop = 2 * math.pi * frequency * (frames - 1) / FRAME_RATE
-    arr = numpy.linspace(start=0, stop=stop, num=frames)
+    arr = numpy.zeros(frames)
+    arr += frequency * 2 * math.pi / FRAME_RATE
+    arr *= distortion(frames)
+    arr.cumsum(out=arr)
     numpy.sin(arr, out=arr)
     arr[-256:] *= numpy.linspace(start=1, stop=0, num=256)
     arr[:256] *= numpy.linspace(start=0, stop=1, num=256)

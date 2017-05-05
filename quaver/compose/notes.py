@@ -1,5 +1,5 @@
-from muse.compose.sounds import Note, Silence
-from muse.compose.constants import A440
+from quaver.compose.sounds import Note, Silence
+from quaver.compose.constants import A440
 
 
 A4 = Note(A440)

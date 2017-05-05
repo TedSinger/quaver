@@ -8,13 +8,13 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='muse',
+    name='quaver',
     version='0.0.1',
 
     description='A music composition DSL for Python',
     long_description=long_description,
 
-    url='https://github.com/tedsinger/muse',
+    url='https://github.com/tedsinger/quaver',
 
     author='Ted Singer',
     author_email='',

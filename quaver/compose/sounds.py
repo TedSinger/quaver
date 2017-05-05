@@ -1,11 +1,11 @@
 from math import log
 import abc
 from typing import List, TypeVar
-from muse.compose.base import _Playable, _duration_suffix, T
-from muse.compose.constants import _C4_FREQ, OCTAVE, _HALF_STEP_INTERVAL, MAJ_6, MIN_7, MAJ_3, MAJ_7, PFT_5, MIN_3, \
+from quaver.compose.base import _Playable, _duration_suffix, T
+from quaver.compose.constants import _C4_FREQ, OCTAVE, _HALF_STEP_INTERVAL, MAJ_6, MIN_7, MAJ_3, MAJ_7, PFT_5, MIN_3, \
     MIN_6, FRAME_RATE
-from muse.compose.structure import Stanza, Chord
-from muse.play.block import Block
+from quaver.compose.structure import Stanza, Chord
+from quaver.play.block import Block
 
 
 class _Constant(_Playable):
@@ -104,11 +104,12 @@ class Note(_Constant):
         return tone + _duration_suffix(self.duration)
 
     def to_sound(self, tempo=60, volume=1) -> Block:
-        return Block.beep(self.len * 60. * FRAME_RATE / tempo, self._freq, volume * self.volume * (220 / self._freq))
+        return Block.beep(self.len * 60. * FRAME_RATE / tempo, self._freq,
+                          volume * self.volume * (220 / self._freq) ** 1.25)
 
     @property
     def staccato(self):
-        return (self / 2) | (Silence() * (self.len / 2))
+        return (self | (Silence() * self.len)) / 2
 
     def trill(self, n: int):
         atempo = self._with('duration', FRAME_RATE / 16)
