@@ -57,6 +57,9 @@ class _Constant(_Playable):
         else:
             return Chord(self, other)
 
+    def __eq__(self, other):
+        # FIXME: iffy
+        return str(self) == str(other)
 
 class Silence(_Constant):
     def __init__(self, duration=FRAME_RATE):
@@ -101,22 +104,17 @@ class Note(_Constant):
         note = 'CCDDEFFGGAAB'[half_steps % OCTAVE]
         sharp = '010100101010'[half_steps % OCTAVE]
         tone = ('+' if int(sharp) else '') + note + str(octave)
+        # FIXME: need a suffix for volume!
         return tone + _duration_suffix(self.duration)
 
     def to_sound(self, tempo=60, volume=1) -> Block:
-        return Block.beep(self.len * 60. * FRAME_RATE / tempo, self._freq,
+        return Block.beep(int(self.len * 60. * FRAME_RATE / tempo), self._freq,
                           volume * self.volume * (220 / self._freq) ** 1.25)
 
     @property
     def staccato(self):
         return (self | (Silence() * self.len)) / 2
 
-    def trill(self, n: int):
-        atempo = self._with('duration', FRAME_RATE / 16)
-        s = Stanza(atempo, atempo.T(n))
-        return atempo * 3 | atempo.T(n) * 2 | \
-               s.x(round((self.duration - atempo.duration * 6) / (2 * atempo.duration))) | \
-               atempo
 
     @property
     def maj(self) -> Chord:

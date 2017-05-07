@@ -7,6 +7,8 @@ import tempfile
 import subprocess
 from quaver.compose.constants import FRAME_RATE
 
+CLIP_FRAMES = 256
+
 
 class Block(object):
     @property
@@ -23,7 +25,7 @@ class Block(object):
         return (arr * (2 ** 15 - 1)).astype('int16').tobytes()
 
     @classmethod
-    def beep(cls, frames, frequency, amplitude):
+    def beep(cls, frames: int, frequency, amplitude):
         return LazyBlock(lambda: beep_array(frames, frequency, amplitude), 0)
 
     @classmethod
@@ -102,24 +104,27 @@ class CollectionBlock(Block):
         return self.start_frame + len(self.array)
 
 
-_BEEPS = {}
+def memoize(fn):
+    cache = {}
+
+    def new_fn(*args):
+        if args not in cache:
+            cache[args] = fn(*args)
+        return cache[args]
+
+    return new_fn
 
 
-def beep_array(frames, frequency, amplitude):
-    if (frames, frequency, amplitude) not in _BEEPS:
-        _BEEPS[(frames, frequency, amplitude)] = _beep_array(frames, frequency, amplitude)
-    return _BEEPS[(frames, frequency, amplitude)]
-
-
-def distortion(frames):
+@memoize
+def distortion(frames: int):
     pivot = math.pi * 7 / 4
-    part_one = numpy.linspace(start=0, stop=pivot, num=int(FRAME_RATE / 4))
-    if frames > FRAME_RATE / 4:
-        part_two = numpy.linspace(start=pivot, stop=pivot + math.pi * 17 * (frames / FRAME_RATE - 1/4.) ,
-                                    num=frames - int(FRAME_RATE / 4))
+    part_one = numpy.linspace(start=0, stop=pivot, num=FRAME_RATE // 4)
+    if frames > FRAME_RATE // 4:
+        part_two = numpy.linspace(start=pivot, stop=pivot + math.pi * 17 * (frames / FRAME_RATE - 1 / 4.),
+                                  num=frames - FRAME_RATE // 4)
         total = numpy.zeros(frames)
-        total[:int(FRAME_RATE / 4)] = part_one
-        total[int(FRAME_RATE / 4):] = part_two
+        total[:FRAME_RATE // 4] = part_one
+        total[FRAME_RATE // 4:] = part_two
     else:
         total = part_one[:frames]
     numpy.sin(total, out=total)
@@ -128,13 +133,14 @@ def distortion(frames):
     return total
 
 
-def _beep_array(frames, frequency, amplitude):
+@memoize
+def beep_array(frames: int, frequency, amplitude):
     arr = numpy.zeros(frames)
     arr += frequency * 2 * math.pi / FRAME_RATE
     arr *= distortion(frames)
     arr.cumsum(out=arr)
     numpy.sin(arr, out=arr)
-    arr[-256:] *= numpy.linspace(start=1, stop=0, num=256)
-    arr[:256] *= numpy.linspace(start=0, stop=1, num=256)
+    arr[-CLIP_FRAMES:] *= numpy.linspace(start=1, stop=0, num=CLIP_FRAMES)
+    arr[:CLIP_FRAMES] *= numpy.linspace(start=0, stop=1, num=CLIP_FRAMES)
     arr *= amplitude
     return arr

@@ -1,3 +1,4 @@
+from quaver.compose import D4
 from quaver.compose.structure import Stanza
 
 
@@ -23,3 +24,6 @@ class MajorKey(Key):
 
 class MinorKey(Key):
     ALLOWED_DIFFS = [0, 2, 3, 5, 7, 8, 10]
+
+
+DMaj = MajorKey(D4)

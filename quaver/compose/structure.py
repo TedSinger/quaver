@@ -58,8 +58,10 @@ class _Collection(_Playable):
             return reduce(gcf, [n.len for n in self])
 
     def __repr__(self):
-        return self.__class__.__name__ + '(' + ', '.join(map(str, (self / self._gcf()).notes)) + ')' + _duration_suffix(
-            FRAME_RATE * self._gcf())
+        note_str = ', '.join(map(str, (self / self._gcf()).notes))
+        duration_str = _duration_suffix(FRAME_RATE * self._gcf())
+        # need a suffix for volume!
+        return self.__class__.__name__ + '(' + note_str + ')' + duration_str
 
     def _combine(self, other, cls):
         notes = []
@@ -101,6 +103,10 @@ class _Collection(_Playable):
         assert isinstance(other, int)
         return Stanza(*[self for i in range(other)])
 
+    def __eq__(self, other):
+        # FIXME: _Collections of 1, and Chords are commutative
+        return isinstance(other, self.__class__) and self.notes == other.notes
+
 
 class Chord(_Collection):
     def to_sound(self, tempo=60, volume=1) -> Block:
@@ -129,6 +135,10 @@ class Stanza(_Collection):
     @property
     def len(self):
         return sum([n.len for n in self] + [0])
+
+    @property
+    def stacked(self):
+        return Chord(*self.notes) * len(self.notes)
 
 
 def gcf(a, b):
