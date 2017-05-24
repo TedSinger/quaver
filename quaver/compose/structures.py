@@ -6,15 +6,6 @@ from quaver.compose.constants import FRAME_RATE
 from quaver.play.block import CollectionBlock, Block
 
 
-# TODO:
-# rhythm templates
-# Another pass on typing
-# add intro-clicks
-# ast parsing of text input
-# switch to rational arithmetic for beats
-
-
-
 class _Collection(_Playable):
     __metaclass__ = abc.ABCMeta
 

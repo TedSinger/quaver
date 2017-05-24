@@ -1,17 +1,18 @@
 A music compostion internal DSL for Python
 >>> +A4.maj
 Chord(+A4, D5, +E5)
+
 See quaver/pieces/demo.py for more examples
 
 **IMMEDIATE GOAL**
-- A robust, flexible, and intuitive structure for representing and manipulating musical forms
+- A complete, flexible, and intuitive structure for representing and manipulating musical forms
 
 **DISTANT GOALS**
+- Output nice sound files and play them easily in a cross-platform way
 - Parse and output other text-based music notations
-- Output nice sound files
 
 **NON-GOALS**
-- Make _quaver_ into a excellent music notation system
-- - Python syntax limitations will always be a handicap compared to other notations
-- - Once _quaver_ has decent parsers, they will be the preferred entry point
--
+- Make _quaver_ into an excellent music notation system
+- - Once _quaver_ has decent parsers for other notation systems, they will be the preferred entry points.
+- - Python syntax restrictions will always be a handicap compared to other notations. I think I've already gone overboard with operator-overloading
+- Anything involving real-time audio

@@ -20,7 +20,7 @@ if False:
     ((A4.maj | D5.min).x(4).T(-5) / 2) % 2  # Chords and Stanzas apply operations to ALL of their contents
 
     A4.maj.to_sound(60).to_wav('~/amajchord.wav')  # Create a wav file at 60 beats per minute
-    A4.maj > 60  # Create a tempfile and play it immediately (Linux only)
+    A4.maj > 60  # Create a tempfile and play it immediately, at 60 bpm (Linux only)
 
 
 # It's all regular Python code. You can write your own functions!
