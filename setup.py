@@ -11,7 +11,7 @@ setup(
     name='quaver',
     version='0.0.1',
 
-    description='A music composition DSL for Python',
+    description='A music composition library for Python',
     long_description=long_description,
 
     url='https://github.com/tedsinger/quaver',
