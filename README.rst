@@ -1,7 +1,7 @@
 A music compostion library for Python
 
 >>> +A4.maj
-Chord(+A4, D5, +E5)
+Chord(+A4, D5, F5)
 
 See quaver/pieces/example.py for more examples
 
