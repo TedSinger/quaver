@@ -19,7 +19,7 @@ setup(
     author='Ted Singer',
     author_email='',
 
-    license='MIT',
+    license='GPLv3',
 
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -27,7 +27,7 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Multimedia :: Sound/Audio',
 
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
 
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
