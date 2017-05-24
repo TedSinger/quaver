@@ -46,7 +46,7 @@ class _Collection(_Playable):
         if len(self.notes) == 1:
             return self.notes[0].len
         else:
-            return reduce(gcf, [n.len for n in self])
+            return reduce(_gcf, [n.len for n in self])
 
     def __repr__(self):
         note_str = ', '.join(map(str, (self / self._gcf()).notes))
@@ -132,10 +132,10 @@ class Stanza(_Collection):
         return Chord(*self.notes) * len(self.notes)
 
 
-def gcf(a, b):
+def _gcf(a, b):
     if b > a:
-        return gcf(b, a)
+        return _gcf(b, a)
     elif b == 0:
         return a
     else:
-        return gcf(b, a % b)
+        return _gcf(b, a % b)

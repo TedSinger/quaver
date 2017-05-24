@@ -1,5 +1,5 @@
 from quaver.compose import D4
-from quaver.compose.structure import Stanza
+from quaver.compose.structures import Stanza
 
 
 class Key(object):

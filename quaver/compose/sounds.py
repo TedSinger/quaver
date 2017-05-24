@@ -4,7 +4,7 @@ from typing import List, TypeVar
 from quaver.compose.base import _Playable, _duration_suffix, T
 from quaver.compose.constants import _C4_FREQ, OCTAVE, _HALF_STEP_INTERVAL, MAJ_6, MIN_7, MAJ_3, MAJ_7, PFT_5, MIN_3, \
     MIN_6, FRAME_RATE
-from quaver.compose.structure import Stanza, Chord
+from quaver.compose.structures import Stanza, Chord
 from quaver.play.block import Block
 
 

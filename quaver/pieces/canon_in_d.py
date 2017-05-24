@@ -1,5 +1,5 @@
 from quaver.compose import *
-from quaver.pieces.demo import trill
+from quaver.pieces.example import trill
 
 BASE = Stanza(D3, A2, B2, +F2, G2, D2, G2, A2)
 
