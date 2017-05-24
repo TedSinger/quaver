@@ -39,7 +39,7 @@ class Block(object):
                     nchannels,
                     sample_width,
                     FRAME_RATE,
-                    0,  # setting zero frames, should update automatically as more frames written
+                    0,
                     compression_type,
                     compression_name
                 ))
@@ -117,6 +117,9 @@ def memoize(fn):
 
 @memoize
 def distortion(frames: int):
+    """
+    Something like vibrato 
+    """
     pivot = math.pi * 7 / 4
     part_one = numpy.linspace(start=0, stop=pivot, num=FRAME_RATE // 4)
     if frames > FRAME_RATE // 4:
