@@ -1,7 +1,7 @@
 A music compostion library for Python
 
->>> +A4.maj
-Chord(+A4, D5, F5)
+>>> (+A4).maj
+{+A4, D5, F5}
 
 See quaver/pieces/example.py for more examples
 
@@ -18,5 +18,5 @@ See quaver/pieces/example.py for more examples
 
 - Make _quaver_ into an excellent music notation system
   Once _quaver_ has decent parsers for other notation systems, they will be the preferred entry points.
-  Python syntax restrictions will always be a handicap compared to other notations. I think I've already gone overboard with operator-overloading
+  Python syntax restrictions will always be a handicap compared to other notations.
 - Anything involving real-time audio

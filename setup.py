@@ -9,7 +9,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='quaver',
-    version='0.0.1',
+    version='0.0.2',
 
     description='A music composition library for Python',
     long_description=long_description,

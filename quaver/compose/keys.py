@@ -1,5 +1,4 @@
 from quaver.compose import D4
-from quaver.compose.structures import Stanza
 
 
 class Key(object):
@@ -15,7 +14,7 @@ class Key(object):
             candidates = [slc.start.T(i) for i in range(0, total_halves + 1)]
         else:
             candidates = [slc.start.T(-i) for i in range(0, - total_halves + 1)]
-        return Stanza(*[c for c in candidates if c in self])
+        return tuple(c for c in candidates if c in self)
 
 
 class MajorKey(Key):
