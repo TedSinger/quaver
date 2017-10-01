@@ -1,22 +1,10 @@
-A music compostion library for Python
+A music composition library for Python
 
+>>> C3.T(PFT_5)
+G3
 >>> (+A4).maj
 {+A4, D5, F5}
+>>> play(Decrescendo(2) ** Longer(2) ** Staccato ** MajorKey(D4)[D4:D5], tempo=140)
 
 See quaver/pieces/example.py for more examples
-
-**IMMEDIATE GOAL**
-
-- A complete, flexible, and intuitive structure for representing and manipulating musical forms
-
-**DISTANT GOALS**
-
-- Output nice sound files and play them easily in a cross-platform way
-- Parse and output other text-based music notations
-
-**NON-GOALS**
-
-- Make _quaver_ into an excellent music notation system
-  Once _quaver_ has decent parsers for other notation systems, they will be the preferred entry points.
-  Python syntax restrictions will always be a handicap compared to other notations.
-- Anything involving real-time audio
+Requires SoX `play` to automatically play, but can produce .wav files without it.

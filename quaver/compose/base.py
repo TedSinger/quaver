@@ -21,15 +21,33 @@ class PartialRecursive(object):
 
     def __call__(self, playable):
         if isinstance(playable, _Playable):
-            return self.fn(playable, *self.args, **self.kwargs)
+            return self._on_playable(playable)
         elif isinstance(playable, tuple):
-            return tuple(self(entry) for entry in playable)
+            return self._on_tuple(playable)
         elif isinstance(playable, set):
-            return set(self(entry) for entry in playable)
+            return self._on_set(playable)
         elif isinstance(playable, dict):
-            return dict((key, self(value)) for key, value in playable.items())
+            return self._on_dict(playable)
         else:
             raise TypeError(playable)
+
+    def _on_playable(self, p):
+        return self.fn(p, *self.args, **self.kwargs)
+
+    def _on_tuple(self, tup):
+        return tuple(self(entry) for entry in tup)
+
+    def _on_set(self, st):
+        return set(self(entry) for entry in st)
+
+    def _on_dict(self, dt):
+        return dict((key, self(value)) for key, value in dt.items())
+
+    def __pow__(self, other):
+        if isinstance(other, PartialRecursive):
+            return PartialRecursive(lambda p: self(other(p)))
+        else:
+            return self(other)
 
 
 class Longer(PartialRecursive):
@@ -62,12 +80,66 @@ class _Staccato(PartialRecursive):
         super(_Staccato, self).__init__(lambda p: p.staccato)
 Staccato = _Staccato()
 
+
+def get_len(playable):
+    if isinstance(playable, _Playable):
+        return playable.len
+    elif isinstance(playable, tuple):
+        return sum(map(get_len, playable), Rational(0, 1))
+    elif isinstance(playable, set):
+        return max(map(get_len, playable))
+    elif isinstance(playable, dict):
+        return max(map(get_len, playable.values()))
+    else:
+        raise TypeError(playable)
+
+
+class Crescendo(PartialRecursive):
+    def __init__(self, by):
+        super(Crescendo, self).__init__(lambda p, by: p.cresc(by), by)
+        self.by = by
+
+    def _on_tuple(self, tup):
+        lens = [get_len(p).to_float() for p in tup]
+        total = sum(lens)
+        vols = []
+        cursor = 1.
+        for l in lens:
+            vols.append(cursor)
+            cursor += (l * (self.by - 1) / total)
+        vols.append(self.by)
+        parts = []
+        for i, p in enumerate(tup):
+            parts.append(Crescendo(vols[i + 1] / vols[i])(Louder(vols[i])(p)))
+        return tuple(parts)
+
+
+def Decrescendo(by):
+    return Crescendo(1. / by)
+
+
 class Rational(PartialRecursive):
     def __init__(self, num, den):
         super(Rational, self).__init__(lambda p: p._with('len', self))
         g = _gcf(num, den)
         self.num = num // g
         self.den = den // g
+
+    def to_float(self):
+        return float(self.num) / self.den
+
+    def __gt__(self, other):
+        return self.num * other.den > other.num * self.den
+
+    def __add__(self, other):
+        if isinstance(other, int):
+            return Rational(self.num + other * self.den, self.den)
+        elif isinstance(other, Rational):
+            return Rational(self.num * other.den + self.den * other.num, self.den * other.den)
+        elif isinstance(other, float):
+            return other * self.num / self.den
+        else:
+            raise
 
     def __mul__(self, other):
         if isinstance(other, int):
@@ -100,6 +172,7 @@ class Rational(PartialRecursive):
         else:
             return '._%s_%s' % (self.num, self.den)
 
+
 WHOLE = Rational(1, 1)
 HALF = Rational(1, 2)
 QUARTER = Rational(1, 4)
@@ -111,7 +184,8 @@ class _Playable(object):
     __metaclass__ = abc.ABCMeta
 
     len: Rational = Rational(0, 1)
-    volume: float = 0.25
+    start_volume: float = 0.25
+    stop_volume: float = 0.25
 
     @abc.abstractmethod
     def to_sound(self, tempo=60, volume=1) -> Block:

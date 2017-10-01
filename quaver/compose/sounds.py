@@ -48,10 +48,16 @@ class _Constant(_Playable):
         return self._with('len', self.len / other)
 
     def louder(self: _SubPlayable, other: float) -> _SubPlayable:
-        return self._with('volume', self.volume * other)
+        return self._with('start_volume', self.start_volume * other)._with('stop_volume', self.stop_volume * other)
 
     def softer(self: _SubPlayable, other: float) -> _SubPlayable:
         return self.louder(1. / other)
+
+    def cresc(self: _SubPlayable, other: float) -> _SubPlayable:
+        return self._with('stop_volume', self.stop_volume * other)
+
+    def decresc(self: _SubPlayable, other: float) -> _SubPlayable:
+        return self.cresc(1. / other)
 
     def __eq__(self, other):
         # FIXME: iffy
@@ -94,16 +100,17 @@ class Silence(_Constant):
 
 
 class Note(_Constant):
-    def __init__(self, freq, len=QUARTER, volume=.25):
+    def __init__(self, freq, len=QUARTER, start_volume=.25, stop_volume=0.25):
         self._freq = freq
         self.len = len
-        self.volume = volume
+        self.start_volume = start_volume
+        self.stop_volume = stop_volume
 
     def __hash__(self):
-        return int(self._freq) + hash(self.len) + int(self.volume * 300)
+        return int(self._freq) + hash(self.len) + int(self.start_volume * 300) + int(self.stop_volume * 555)
 
     def _copy(self) -> 'Note':
-        return Note(self._freq, self.len, self.volume)
+        return Note(self._freq, self.len, self.start_volume, self.stop_volume)
 
     def T(self, half_steps):
         return self._with('_freq', self._freq * _HALF_STEP_INTERVAL ** half_steps)
@@ -125,7 +132,8 @@ class Note(_Constant):
     def to_sound(self, tempo=60, volume=1) -> Block:
         return Block.beep(int(self.len * 4 * 60. * FRAME_RATE / tempo),
                           self._freq,
-                          volume * self.volume * (220 / self._freq) ** 1.25)
+                          volume * self.start_volume * (220 / self._freq) ** 1.25,
+                          volume * self.stop_volume * (220 / self._freq) ** 1.25)
 
     @property
     def staccato(self):

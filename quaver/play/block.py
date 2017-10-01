@@ -25,8 +25,8 @@ class Block(object):
         return (arr * (2 ** 15 - 1)).astype('int16').tobytes()
 
     @classmethod
-    def beep(cls, frames: int, frequency, amplitude):
-        return LazyBlock(lambda: beep_array(frames, frequency, amplitude), 0)
+    def beep(cls, frames: int, frequency, start_amplitude, stop_amplitude):
+        return LazyBlock(lambda: beep_array(frames, frequency, start_amplitude, stop_amplitude), 0)
 
     @classmethod
     def silence(cls, frames: int):
@@ -137,7 +137,7 @@ def distortion(frames: int):
 
 
 @memoize
-def beep_array(frames: int, frequency, amplitude):
+def beep_array(frames: int, frequency, start_amplitude, stop_amplitude):
     arr = numpy.zeros(frames)
     arr += frequency * 2 * math.pi / FRAME_RATE
     arr *= distortion(frames)
@@ -145,5 +145,5 @@ def beep_array(frames: int, frequency, amplitude):
     numpy.sin(arr, out=arr)
     arr[-CLIP_FRAMES:] *= numpy.linspace(start=1, stop=0, num=CLIP_FRAMES)
     arr[:CLIP_FRAMES] *= numpy.linspace(start=0, stop=1, num=CLIP_FRAMES)
-    arr *= amplitude
+    arr *= numpy.linspace(start=start_amplitude, stop=stop_amplitude, num=frames)
     return arr
