@@ -8,9 +8,9 @@ if False:
     C3._2  # a half note
     C3._8  # an eighth note
     C3._3_8 # a dotted quarter
-    Louder(2) << C3  # **Louder**
-    Softer(2) << C3  # ..Softer..
-    T(7) << C3 == G3  # Transposed up seven half-steps (a perfect fifth)
+    Louder(2) ** C3  # **Louder**
+    Softer(2) ** C3  # ..Softer..
+    T(7) ** C3 == G3  # Transposed up seven half-steps (a perfect fifth)
     Z  # A quarter rest
     Louder(2) ** T(7) ** Z == Z  # Unchanged - rests are not affected by pitch or dynamics...
     Z._2  # ...but tempo changes still work
