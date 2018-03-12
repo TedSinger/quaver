@@ -34,9 +34,6 @@ setup(
     ],
 
     keywords='music composing chord stanza DSL',
-
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-
+    packages=find_packages(),
     install_requires=['numpy'],
-
 )
